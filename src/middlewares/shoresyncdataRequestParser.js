@@ -1,6 +1,11 @@
 // shoresyncdataRequestParser.js
 
-export function shoresyncdataRequestParser(req, res, next) {
+const queries = require('../queries.js');
+// createShoreSyncTable,
+// insertParsedData
+
+
+function shoresyncdataRequestParser(req, res, next) {
   // Check if the request body contains the required data
   if (!req.body) {
       return res.status(400).send('Missing required data in request body');
@@ -69,12 +74,20 @@ export function shoresyncdataRequestParser(req, res, next) {
   parsedData.marshDB = BankAttributesData.marshItem;
   parsedData.beachDB = BankAttributesData.beachItem;
   parsedData.phragmitesDB = BankAttributesData.phragmitesAustralis;
+  parsedData.latitude = req.body.location.latitude;
+  parsedData.longitude = req.body.location.longitude;
 
 
   //finally fill it with location
   //In this lattitude and longitude are numbers
   parsedData.location = req.body.location;
   console.log("parsedData: ", parsedData);
+
+  queries.createShoreSyncTable();
+  queries.insertParsedData(parsedData);
   // Call the next middleware
   next();
 }
+
+
+module.exports = { shoresyncdataRequestParser };

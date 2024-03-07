@@ -1,6 +1,11 @@
-import express from 'express';
+// import express from 'express';
  
-import {shoresyncdataRequestParser} from './middlewares/shoresyncdataRequestParser.js';
+// import {shoresyncdataRequestParser} from './middlewares/shoresyncdataRequestParser.js';
+
+
+const express = require('express');
+const { shoresyncdataRequestParser } = require('./middlewares/shoresyncdataRequestParser.js');
+
 const app = express()
 
 app.use(express.json());
@@ -16,9 +21,10 @@ app.get('/', (req, res) => {
     res.send('hello from Vt 2');
 })
 
-app.post('/api/addFormData', shoresyncdataRequestParser, (req, res) => {
+app.post('/api/addFormData', shoresyncdataRequestParser, (req, res) => {    
     const selectedValues = [];
     selectedValues.push(req.body);
     res.send(selectedValues);
 })
-export default app;
+
+module.exports = app;

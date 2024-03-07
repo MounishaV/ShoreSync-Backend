@@ -1,5 +1,7 @@
-const express = require('express')
+// const express = require('express')
 const { Pool } = require('pg');
+// import { Pool } from 'pg';
+const express = require('express');
 const app = express()
 const port = 8080
 
@@ -12,5 +14,6 @@ const pool = new Pool({
   });
 
 module.exports = pool;
+
   
 

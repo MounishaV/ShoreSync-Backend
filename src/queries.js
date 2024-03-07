@@ -1,6 +1,6 @@
 // PostgreSQL connection configuration
 const pool = require('./dbpool.js');
-
+// import {pool} from './dbpool.js';
 // Function to create table if not exists
 async function createShoreSyncTable() {
     try {
@@ -12,11 +12,11 @@ async function createShoreSyncTable() {
                 bank_height VARCHAR(255),
                 bank_stability VARCHAR(255),
                 bank_cover VARCHAR(255),
-                marsh_buffer BOOLEAN,
-                beach_buffer BOOLEAN,
-                phragmites_australis BOOLEAN,
-                erosional_control_structures JSONB,
-                recreational_structures JSONB,
+                marsh_buffer VARCHAR(255),
+                beach_buffer VARCHAR(255),
+                phragmites_australis VARCHAR(255),
+                erosional_control_structures VARCHAR[],
+                recreational_structures VARCHAR[],
                 latitude DECIMAL(9, 6),
                 longitude DECIMAL(9, 6)
             )
@@ -28,18 +28,74 @@ async function createShoreSyncTable() {
     }
 }
 
-// Dummy function 1
-function dummyFunction1() {
-    console.log('This is dummy function 1');
+async function insertParsedData(parsedData) {
+    try {
+        const query = `
+            INSERT INTO Shoresyncdata (
+                landform,
+                bank_height,
+                bank_stability,
+                bank_cover,
+                marsh_buffer,
+                beach_buffer,
+                phragmites_australis,
+                erosional_control_structures,
+                recreational_structures,
+                latitude,
+                longitude
+            ) VALUES (
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`;
+
+        // Extract data from the parsedData object
+        const {
+            erosionControlOptions,
+            recreationalOptions,
+            otherOptions,
+            landUseDB,
+            bankHeightDB,
+            stabilityDB,
+            coverDB,
+            marshDB,
+            beachDB,
+            phragmitesDB,
+            latitude,
+            longitude
+        } = parsedData;
+
+
+
+        console.log('Worked till here ');
+        // Execute the query
+        await pool.query(query, [
+            landUseDB,
+            bankHeightDB,
+            stabilityDB,
+            coverDB,
+            marshDB,
+            beachDB,
+            phragmitesDB,
+            erosionControlOptions,
+            recreationalOptions,
+            latitude,
+            longitude
+        ]);
+
+        console.log('Worked till here 2 ');
+
+        console.log('Data inserted successfully');
+    } catch (error) {
+        console.error('Error inserting data:', error);
+    }
 }
 
-// Dummy function 2
-function dummyFunction2() {
-    console.log('This is dummy function 2');
-}
-createShoreSyncTable();
-
-// Exporting multiple functions
 module.exports = {
-  createShoreSyncTable
+    createShoreSyncTable,
+    insertParsedData
 };
+
+
+// // Exporting multiple functions
+// module.exports = {
+//   createShoreSyncTable,
+//   insertParsedData
+// };
