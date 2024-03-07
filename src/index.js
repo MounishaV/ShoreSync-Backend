@@ -17,10 +17,11 @@ app.get('/', (req, res) => {
 
 app.post('/api/addFormData',(req, res) => {
     console.log("checkedItems: ", req.body);
-    //call to push into db
+
     const selectedValues = [];
     selectedValues.push(req.body);
     console.log("selected values:: ", selectedValues[0].landUse);
+    //database call
     res.send(selectedValues);
 })
 export default app;
