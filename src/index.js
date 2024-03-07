@@ -21,7 +21,7 @@ app.post('/api/addFormData',(req, res) => {
     const selectedValues = [];
     selectedValues.push(req.body);
     console.log("selected values:: ", selectedValues[0].landUse);
-    //database call
+    //database call to push the user selected values
     res.send(selectedValues);
 })
 export default app;
