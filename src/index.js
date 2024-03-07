@@ -1,5 +1,6 @@
 import express from 'express';
-
+ 
+import {shoresyncdataRequestParser} from './middlewares/shoresyncdataRequestParser.js';
 const app = express()
 
 app.use(express.json());
@@ -15,13 +16,9 @@ app.get('/', (req, res) => {
     res.send('hello from Vt 2');
 })
 
-app.post('/api/addFormData',(req, res) => {
-    console.log("checkedItems: ", req.body);
-
+app.post('/api/addFormData', shoresyncdataRequestParser, (req, res) => {
     const selectedValues = [];
     selectedValues.push(req.body);
-    console.log("selected values:: ", selectedValues[0].landUse);
-    //database call to push the user selected values
     res.send(selectedValues);
 })
 export default app;

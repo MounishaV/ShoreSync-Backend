@@ -8,7 +8,7 @@ async function createShoreSyncTable() {
         await client.query(`
             CREATE TABLE IF NOT EXISTS Shoresyncdata (
                 txn_id SERIAL PRIMARY KEY,
-                landform JSONB,
+                landform VARCHAR[],
                 bank_height VARCHAR(255),
                 bank_stability VARCHAR(255),
                 bank_cover VARCHAR(255),
