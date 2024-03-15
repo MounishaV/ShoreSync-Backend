@@ -28,6 +28,23 @@ async function createShoreSyncTable() {
     }
 }
 
+async function createShoreSyncImagesTable() {
+    try {
+        const client = await pool.connect();
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS ShoresyncImages (
+                /*txn_id SERIAL FOREIGN KEY REFERENCES Shoresyncdata(txn_id),*/
+                image_data BYTEA  
+                                                       
+            )
+        `);
+        console.log('Table ShoresyncImages created successfully or already exists.');
+        client.release();
+    } catch (error) {
+        console.error('Error creating table ShoresyncImages:', error);
+    }
+}
+
 async function insertParsedData(parsedData) {
     try {
         const query = `
@@ -88,9 +105,32 @@ async function insertParsedData(parsedData) {
     }
 }
 
+async function insertImages(images) {
+    try {
+        const query = `
+            INSERT INTO ShoresyncImages (
+                image_data
+            ) VALUES (
+                $1)`;
+
+
+        await pool.query(query, [
+            images
+        ]);
+
+
+
+        console.log('Images inserted successfully');
+    } catch (error) {
+        console.error('Error inserting images:', error);
+    }
+}
+
 module.exports = {
     createShoreSyncTable,
-    insertParsedData
+    insertParsedData,
+    createShoreSyncImagesTable,
+    insertImages
 };
 
 

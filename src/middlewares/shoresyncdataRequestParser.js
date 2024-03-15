@@ -3,7 +3,7 @@
 const queries = require('../queries.js');
 // createShoreSyncTable,
 // insertParsedData
-
+const fs = require("fs");
 
 function shoresyncdataRequestParser(req, res, next) {
   // Check if the request body contains the required data
@@ -77,6 +77,16 @@ function shoresyncdataRequestParser(req, res, next) {
   parsedData.latitude = req.body.location.latitude;
   parsedData.longitude = req.body.location.longitude;
 
+  // const imagesList = req.body.FinalSubmitForm.image;
+  // console.log("image::",imagesList);
+  // // Loop through the selectedErosionControlOptions array
+  // for (const image of imagesList) {
+  //   // Push the label to the array
+  //   console.log("each image::",image);
+  // }
+  // const bitmap = fs.readFileSync(req.body.FinalSubmitForm.image)
+  // const buf = new Buffer(bitmap)
+  // console.log("buff",buf);
 
   //finally fill it with location
   //In this lattitude and longitude are numbers
