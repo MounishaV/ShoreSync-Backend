@@ -10,16 +10,18 @@ function shoresyncdataRequestParser(req, res, next) {
   if (!req.body) {
       return res.status(400).send('Missing required data in request body');
   }
+  console.log("req.body: ", req.body);
+
   const landUse = req.body.landUse;
   const BankAttributesData = req.body.BankAttributesData;
-  const ShorelineFeaturesData = req.body.ShorelineFeaturesData;
-
+  const ShoreLineFeaturesData = req.body.ShoreLineFeaturesData;
+  console.log("Testing");
   console.log("landUse: ", landUse);
   // console.log("BankAttributesData: ", BankAttributesData);
   // console.log("ShorelineFeaturesData: ", ShorelineFeaturesData);
     
   const parsedData = {};
-    // Initialize an empty array to store the list of strings
+    // Initialize an empty array to store the req.body.FinalSubmitFormlist of strings
   const landUseList = [];
 
   // Loop through the landUse object
@@ -37,8 +39,8 @@ function shoresyncdataRequestParser(req, res, next) {
   // Initialize an empty array to store the labels
   const erosionControlOptionLabels = [];
 
-  // Loop through the selectedErosionControlOptions array
-  for (const option of ShorelineFeaturesData.selectedErosionControlOptions) {
+  // Loop through the erosionStructers array
+  for (const option of ShoreLineFeaturesData.erosionStructers) {
     // Push the label to the array
     erosionControlOptionLabels.push(option.label);
   }
@@ -48,8 +50,8 @@ function shoresyncdataRequestParser(req, res, next) {
   // Initialize an empty array to store the labels
   const recreationalOptionLabels = [];
 
-  // Loop through the selectedErosionControlOptions array
-  for (const option of ShorelineFeaturesData.selectedRecreactionalOptions) {
+  // Loop through the recreationalStructures array
+  for (const option of ShoreLineFeaturesData.recreationalStructures) {
     // Push the label to the array
     recreationalOptionLabels.push(option.label);
   }
@@ -60,8 +62,8 @@ function shoresyncdataRequestParser(req, res, next) {
   // Initialize an empty array to store the labels
   const otherOptionLabels = [];
 
-  // Loop through the selectedErosionControlOptions array
-  for (const option of ShorelineFeaturesData.selectedOtherOptions) {
+  // Loop through the otherOptions array
+  for (const option of ShoreLineFeaturesData.otherOptions) {
     // Push the label to the array
     otherOptionLabels.push(option.label);
   }
@@ -69,13 +71,13 @@ function shoresyncdataRequestParser(req, res, next) {
   parsedData.otherOptions = otherOptionLabels;
   parsedData.landUseDB = landUseList;
   parsedData.bankHeightDB = BankAttributesData.heightItem;
-  parsedData.stabilityDB = BankAttributesData.stabilityItem;
-  parsedData.coverDB = BankAttributesData.coverItem;  
-  parsedData.marshDB = BankAttributesData.marshItem;
-  parsedData.beachDB = BankAttributesData.beachItem;
+  parsedData.stabilityDB = BankAttributesData.bankStability;
+  parsedData.coverDB = BankAttributesData.bankCover;  
+  parsedData.marshDB = BankAttributesData.marshBuffer;
+  parsedData.beachDB = BankAttributesData.bankBuffer;
   parsedData.phragmitesDB = BankAttributesData.phragmitesAustralis;
-  parsedData.latitude = req.body.location.latitude;
-  parsedData.longitude = req.body.location.longitude;
+  parsedData.latitude = req.body.FinalSubmitForm.latitude;
+  parsedData.longitude = req.body.FinalSubmitForm.longitude;
 
   // const imagesList = req.body.FinalSubmitForm.image;
   // console.log("image::",imagesList);
