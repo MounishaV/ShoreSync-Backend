@@ -9,7 +9,7 @@ const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'ShoreSyncDB',
-    password: 'postgres',
+    password: 'capstone24',
     port: 5432,
   });
 
