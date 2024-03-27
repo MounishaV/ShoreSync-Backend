@@ -24,11 +24,21 @@ app.get('/', (req, res) => {
     res.send('hello from Vt 2');
 })
 
-// app.use(bodyParser.raw({
-//     type: ["image/jpeg", "image/png"],
-//     limit: '10mb'
-// }));
+/*app.use(bodyParser.raw({
+   /!* type: ["image/jpeg", "image/png"],*!/
+    inflate: true,
 
+    type: () => true,
+
+    limit: '10mb'
+}));
+
+app.use(bodyParser.json());*/
+const upload = multer({
+    dest: 'uploads/',
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+});
+app.use(bodyParser.urlencoded({ extended: false }))
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
@@ -39,29 +49,49 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage: storage })
+// const upload = multer({ storage: storage })
 app.post('/api/addFormData', shoresyncdataRequestParser, (req, res) => {
     const selectedValues = [];
     selectedValues.push(req.body);
-
+    console.log("selected values:", req.body);
     // queries.createShoreSyncImagesTable();
     // queries.insertImages(req.body);
     res.send(selectedValues);
 })
 
+// app.post("/api/addImages",
+//     /*bodyParser.raw({type: ["image/jpeg", "image/png"], limit: "5mb"}),*/
+//      upload.array("image",20),
+//     (req, res) => {
+//         try {
+//             // console.log(req.body);
+//             console.log("after adding multer, req body:: ",req.body);
+//
+//
+//             queries.createShoreSyncImagesTable();
+//             queries.insertImages(req.body);
+//             res.json({ status: "ok" });
+//         } catch (error) {
+//             console.log("error parsing image")
+//         }
+//     });
+
 app.post("/api/addImages",
-    bodyParser.raw({type: ["image/jpeg", "image/png"], limit: "5mb"}),
-     /*upload.single("image"),*/
-    (req, res) => {
+    upload.array("image",20),
+    async (req, res) => {
         try {
-            // console.log(req.body);
-            console.log("after adding multer, req body:: ",req.body);
-            queries.createShoreSyncImagesTable();
-            queries.insertImages(req.body);
+            if (!req.body || req.body.length === 0) {
+                return res.status(400).json({ error: 'No images uploaded' });
+            }
+            await queries.createShoreSyncImagesTable();
+
+
+            const data = await req.body;
+
+            await queries.insertImages(data);
             res.json({ status: "ok" });
         } catch (error) {
             console.log("error parsing image")
         }
     });
-
 module.exports = app;

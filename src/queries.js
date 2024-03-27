@@ -33,7 +33,7 @@ async function createShoreSyncImagesTable() {
         const client = await pool.connect();
         await client.query(`
             CREATE TABLE IF NOT EXISTS ShoresyncImages (
-                /*txn_id SERIAL FOREIGN KEY REFERENCES Shoresyncdata(txn_id),*/
+                txn_id INTEGER,
                 image_data BYTEA  
                                                        
             )
@@ -105,17 +105,19 @@ async function insertParsedData(parsedData) {
     }
 }
 
-async function insertImages(images) {
+async function insertImages(data) {
     try {
         const query = `
             INSERT INTO ShoresyncImages (
+                txn_id,
                 image_data
             ) VALUES (
-                $1)`;
+                $1, $2)`;
 
 
         await pool.query(query, [
-            images
+            data.txid,
+            data.image
         ]);
 
 
