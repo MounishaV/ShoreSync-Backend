@@ -7,7 +7,7 @@ async function createShoreSyncTable() {
         const client = await pool.connect();
         await client.query(`
             CREATE TABLE IF NOT EXISTS Shoresyncdata (
-                txn_id SERIAL PRIMARY KEY,
+                txn_id INTEGER,
                 landform VARCHAR[],
                 bank_height VARCHAR(255),
                 bank_stability VARCHAR(255),
@@ -49,6 +49,7 @@ async function insertParsedData(parsedData) {
     try {
         const query = `
             INSERT INTO Shoresyncdata (
+                txn_id,
                 landform,
                 bank_height,
                 bank_stability,
@@ -61,10 +62,11 @@ async function insertParsedData(parsedData) {
                 latitude,
                 longitude
             ) VALUES (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`;
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`;
 
         // Extract data from the parsedData object
         const {
+            transactionId,
             erosionControlOptions,
             recreationalOptions,
             otherOptions,
@@ -84,6 +86,7 @@ async function insertParsedData(parsedData) {
         console.log('Worked till here ');
         // Execute the query
         await pool.query(query, [
+            transactionId,
             landUseDB,
             bankHeightDB,
             stabilityDB,
@@ -105,7 +108,7 @@ async function insertParsedData(parsedData) {
     }
 }
 
-async function insertImages(data) {
+async function insertImages(txid, image) {
     try {
         const query = `
             INSERT INTO ShoresyncImages (
@@ -116,8 +119,8 @@ async function insertImages(data) {
 
 
         await pool.query(query, [
-            data.txid,
-            data.image
+            txid,
+            image
         ]);
 
 

@@ -86,9 +86,22 @@ app.post("/api/addImages",
             await queries.createShoreSyncImagesTable();
 
 
-            const data = await req.body;
+            // const data = await req.body;
+            // console.log("images: ",data.image[0]);
 
-            await queries.insertImages(data);
+            const data = await req.body;
+            const files = await req.files;
+            const txid = req.body.txid;
+            console.log("txid:: ",req.body.txid);
+
+            console.log("files :: ",req.files);
+            console.log("files length :: ",req.files.length);
+
+            console.log("files[0 :: ",req.files[0]);
+            for(let i=0;i<files.length;i++){
+                 queries.insertImages(txid, files[i]);
+            }
+            //await queries.insertImages(data);
             res.json({ status: "ok" });
         } catch (error) {
             console.log("error parsing image")
