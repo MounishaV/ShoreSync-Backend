@@ -19,7 +19,7 @@ function shoresyncdataRequestParser(req, res, next) {
   console.log("landUse: ", landUse);
   // console.log("BankAttributesData: ", BankAttributesData);
   // console.log("ShorelineFeaturesData: ", ShorelineFeaturesData);
-    
+  //console.log("here:",req.body.FinalSubmitForm.txnid);
   const parsedData = {};
     // Initialize an empty array to store the req.body.FinalSubmitFormlist of strings
   const landUseList = [];
@@ -78,6 +78,7 @@ function shoresyncdataRequestParser(req, res, next) {
   parsedData.phragmitesDB = BankAttributesData.phragmitesAustralis;
   parsedData.latitude = req.body.FinalSubmitForm.latitude;
   parsedData.longitude = req.body.FinalSubmitForm.longitude;
+  parsedData.transactionId = req.body.FinalSubmitForm.txnid;
 
   // const imagesList = req.body.FinalSubmitForm.image;
   // console.log("image::",imagesList);
