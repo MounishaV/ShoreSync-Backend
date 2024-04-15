@@ -10,7 +10,7 @@ const pool = new Pool({
     host: 'localhost',
     database: 'ShoreSyncDB',
     password: 'capstone24',
-    port: 5432,
+    port: 5433,
   });
 
 module.exports = pool;
