@@ -1,4 +1,6 @@
+require('dotenv').config();
 const pool = require('./dbpool');
+
 
 const createUsersTable = async () => {
     const queryText = `

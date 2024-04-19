@@ -1,13 +1,7 @@
-// import express from 'express';
- 
-// import {shoresyncdataRequestParser} from './middlewares/shoresyncdataRequestParser.js';
 
-require('dotenv').config();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const pool = require('./dbpool');
 const dbInit = require('./db-init');
-
 
 
 const cors = require('cors');
@@ -81,7 +75,7 @@ app.post('/api/register', async (req, res) => {
         const newUser = await pool.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *', [email, hashedPassword]);
         res.status(201).json({ user: newUser.rows[0] });
     } catch (err) {
-        res.status(500).json({ message: "User could not be created" });
+        res.status(500).json({ message: "User could not be created", error: err.message });
     }
 });
 
@@ -97,8 +91,7 @@ app.post('/api/login', async (req, res) => {
             if (!validPassword) {
                 res.status(401).json({ message: "Invalid password" });
             } else {
-                const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-                res.json({ token, message: "Login successful!" });
+                res.json({ message: "Login successful!" });
             }
         }
     } catch (err) {
